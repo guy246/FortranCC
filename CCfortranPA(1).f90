@@ -1,15 +1,15 @@
 program Nagaoka
     implicit none
-    integer :: i,n
-    real:: dlmin,dlmax,a,b,ecartmax,ecartmin
-    real, dimension(:), allocatable :: k,s,D
+    integer :: i,n,j
+    real:: a,b,ecartmax,ecartmin,dlmin,dlmax
+    real, dimension(:), allocatable :: k,dl,D
 
     !Définir la taille des tableaux 
     n=21
 
     !allouez les tableaux
     allocate(k(n))
-    allocate(s(n))
+    allocate(dl(n))
     allocate(D(n))
 
     !Définir les valeurs des tableaux
@@ -22,15 +22,23 @@ program Nagaoka
     dlmax=2.5
 
     !définissez les valeurs de s
-    s=(/(dlmin+(((i-4)*(dlmax-dlmin))/(n-1)),i=1,n)/)
+    dl=(/(dlmin+(((i-1)*(dlmax-dlmin))/(n-1)),i=1,n)/)
+    write(*,*)dl
+    dl=dl/2
+
+    !afficher le vecteur dl
+    write(*,"('dl :')")
+    do i=1,n
+        write(*,"(f8.3)") dl(i)
+    end do
 	
     !appelle de la subroutine
-    call coefficient_a_b(s,k,a,b)
+    call coefficient_a_b(dl,1/k,a,b)
 
     ! Calculez D et ecartmax
-	D = 1.0/(1.0 + a*s/2.0)
-	ecartmax = maxval(abs(s - D))
-    ecartmin = minval(abs(s - D))
+	D = 1.0/(1.0 + a*dl/2.0)
+	ecartmax = maxval(abs(dl - D))
+    ecartmin = minval(abs(dl - D))
 	
 	! Affichez les résultats
 	write(*,*) "K = ", D
@@ -39,7 +47,7 @@ program Nagaoka
 	
 	! Libérez la mémoire
 	deallocate(k)
-	deallocate(s)
+	deallocate(dl)
 	deallocate(D)
 	
 	stop "fin"
@@ -61,8 +69,5 @@ program Nagaoka
         write(*,*) "a = ", a
         write(*,*) "b = ", b
         
-        if (abs(b - 1.0) < 1.0E-6) then
-        write(*,*) "b est bien égal à 1"
-        end if
     end subroutine coefficient_a_b
 end program Nagaoka
