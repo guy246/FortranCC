@@ -1,3 +1,9 @@
+Soit e une précision donnée. On souhaite calculer une approxiamtion du nombre d'or à e près à l'aide de la suite de Fibonacci :
+Un=Un-1+Un-2
+U0=U1=1
+c'est le rapport (Un+1)/Un qui converge vers le nombre d'or.
+La précision sera défini par l'utilisateur. On se limtera à 50 itérations.
+
 program Fibonacci
 	implicit none
 	!Déclaration des variables
